@@ -7,8 +7,6 @@ public class StudentRegistrationApp {
 	public static void main(String[] args) {
 		System.out.println("Student Registration Form\n");
 		
-		// create a Scanner object named sc
-        @SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
 		
 		System.out.print("Enter first name: ");
@@ -21,6 +19,7 @@ public class StudentRegistrationApp {
 		System.out.println("\nWelcome " + fname + " " + lname + "!");
 		System.out.println("Your Registration is complete.");
 		System.out.println("Your temporary password is: " + fname + "*" + year);
+		sc.close();
 
 	}
 

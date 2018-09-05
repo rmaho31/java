@@ -8,13 +8,9 @@ public class RectangleCalculatorApp {
 		System.out.println("Welcome to the Area and Perimeter Calculator\n");
 		
 		String choice = "y";
-		
+		Scanner sc = new Scanner(System.in);
 		//prompts user for input values
-		while (choice.equalsIgnoreCase("y")) {
-			//declare scanner sc
-			@SuppressWarnings("resource")
-			Scanner sc = new Scanner(System.in);
-			
+		while (choice.equalsIgnoreCase("y")) {	
 			System.out.print("Enter length: ");
 			Rectangle.setLength(sc.nextDouble());
 			
@@ -26,9 +22,10 @@ public class RectangleCalculatorApp {
 			System.out.println("Perimeter: " + Rectangle.getPerimeter(Rectangle.getWidth(), Rectangle.getLength()));
 			
 			System.out.print("\nContinue? (y/n):");
+			choice = sc.next();
 			System.out.println();
 			
-			choice = sc.next();
 		}
+		sc.close();
 	}
 }
