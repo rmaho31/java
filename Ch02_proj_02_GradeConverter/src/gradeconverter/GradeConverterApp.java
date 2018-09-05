@@ -18,11 +18,11 @@ public class GradeConverterApp {
 			
 			if (grade >= 88 && grade <= 100)
 				letter = "A"; 	
-			else if (grade <= 87 & grade >= 80)
+			else if (grade >= 80)
 				letter = "B";
-			else if (grade <= 79 && grade >=67)
+			else if (grade >=67)
 				letter = "C";
-			else if (grade <= 66 && grade >= 60)
+			else if (grade >= 60)
 				letter = "D";
 			else if (grade <= 59)
 				letter = "F";
