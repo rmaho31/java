@@ -3,18 +3,17 @@ package clist;
 import java.util.Scanner;
 
 public class Console {
-	public static double getDouble(Scanner sc, String prompt,
-            double min, double max) {
+	public static double getDouble(Scanner sc, String prompt, double min, double max) {
         double d = 0.0;
         boolean isValid = false;
         while (!isValid) {
             d = getDouble(sc, prompt);
             if (d <= min) {
                 System.out.println(
-                        "Error! Number must be greater than " + min + ".");
+                        "\nError! Number must be greater than " + min + ".\n");
             } else if (d >= max) {
                 System.out.println(
-                        "Error! Number must be less than " + max + ".");
+                        "\nError! Number must be less than " + max + ".\n");
             } else {
                 isValid = true;
             }
@@ -31,25 +30,24 @@ public class Console {
                 i = sc.nextInt();
                 isValid = true;
             } else {
-                System.out.println("Error! Invalid integer value. Try again.");
+                System.out.println("\nError! Invalid integer value. Try again.\n");
             }
-            sc.nextLine();  // discard any other data entered on the line
+            sc.nextLine(); //discards
         }
         return i;
     }
 
-    public static int getInt(Scanner sc, String prompt,
-            int min, int max) {
+    public static int getInt(Scanner sc, String prompt, int min, int max) {
         int i = 0;
         boolean isValid = false;
         while (!isValid) {
             i = getInt(sc, prompt);
             if (i <= min) {
                 System.out.println(
-                        "Error! Number must be greater than " + min + ".");
+                        "\nError! Number must be greater than " + min + ".\n");
             } else if (i >= max) {
                 System.out.println(
-                        "Error! Number must be less than " + max + ".");
+                        "\nError! Number must be less than " + max + ".\n");
             } else {
                 isValid = true;
             }
@@ -66,7 +64,7 @@ public class Console {
                 d = sc.nextDouble();
                 isValid = true;
             } else {
-                System.out.println("Error! Invalid decimal value. Try again.");
+                System.out.println("\nError! Invalid decimal value. Try again.\n");
             }
             sc.nextLine();  // discard any other data entered on the line
         }
@@ -82,7 +80,7 @@ public class Console {
 			if (!text.equals("")) {
 				isValid = true;
 			} else {
-				System.out.println("\nError! Must enter a value. Try again.\n");
+				System.out.println("\nError! Must enter a value. Try again.");
 			}
 		}
 		return text;
@@ -95,10 +93,13 @@ public class Console {
 			choice = sc.nextLine();
 			if (choice.equalsIgnoreCase("y") || choice.equalsIgnoreCase("n")) {
 				isValid = true;
+				System.out.println();
 			} else {
-				System.out.println("\nError! Must enter y or n. Try again.\n");
+				System.out.println("\nError! Must enter y or n. Try again.");
 			}
 		}
 		return choice;
 	}	
 }
+
+
