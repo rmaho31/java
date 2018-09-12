@@ -1,0 +1,5 @@
+package abca;
+
+interface Test {
+
+}
