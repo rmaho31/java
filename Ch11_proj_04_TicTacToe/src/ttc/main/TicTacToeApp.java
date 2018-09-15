@@ -11,16 +11,18 @@ public class TicTacToeApp {
 		
 		String choice = "y";
 		while(choice.equalsIgnoreCase("y")) {
-			//declare and initialize game instance
-			TicTacToe ttt = new TicTacToe();
+			//declare and initialize game instance with size of game
+			TicTacToe ttt = new TicTacToe(Console.getInt("Enter the size of the table: ", 0, Integer.MAX_VALUE));
 			
 			/* 
-			 * initializes the Tic Tac Toe game check TicTacToe class for methods
+			 * initializes the TicTacToe game check TicTacToe class for methods
 			 */
 			ttt.beginGame();
 			
 			choice = Console.getString("Play Again? (y/n): ", "y", "n");
 		}	
+		
+		Console.println("Bye - Thanks for playing!");
 	}
 	
 	
