@@ -47,11 +47,11 @@ public class AccountBalanceCalculatorApp {
 	}
 	
 	private static void getFeesAndBalances(CheckingAccount c1, SavingsAccount s1) {
+		c1.deductFees();
+		s1.applyPayment();
 		System.out.println("Monthly payment and fees");
 		System.out.println("Checking fee\t\t\t" + c.format(c1.getMonthlyFee()));
 		System.out.println("Savings interest payment:\t" + c.format(s1.getPayment()));
-		c1.deductFees();
-		s1.addPayment();
 		
 		System.out.println("\nFinal Balances");
 		System.out.println("Checking:\t" + c.format(c1.getBalance()));

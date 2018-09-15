@@ -12,10 +12,10 @@ public class Console {
             d = getDouble(prompt);
             if (d <= min) {
                 System.out.println(
-                        "\nError! Number must be greater than or equal to " + min + ".\n");
+                        "\nError! Number must be greater than " + min + ".\n");
             } else if (d >= max) {
                 System.out.println(
-                        "\nError! Number must be less than or equal to " + max + ".\n");
+                        "\nError! Number must be less than " + max + ".\n");
             } else {
                 isValid = true;
             }
@@ -44,12 +44,12 @@ public class Console {
         boolean isValid = false;
         while (!isValid) {
             i = getInt(prompt);
-            if (i < min) {
+            if (i <= min) {
                 System.out.println(
-                        "\nError! Number must be greater than or equal to " + min + ".\n");
-            } else if (i > max) {
+                        "\nError! Number must be greater than " + min + ".\n");
+            } else if (i >= max) {
                 System.out.println(
-                        "\nError! Number must be less than or equal to " + max + ".\n");
+                        "\nError! Number must be less than " + max + ".\n");
             } else {
                 isValid = true;
             }

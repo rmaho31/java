@@ -16,8 +16,7 @@ public class ChangeCalculatorApp {
 			int ncount = 0;
 			int pcount = 0;
 			
-			System.out.print("Enter number of cents 0-99: ");
-			int cents = sc.nextInt();
+			int cents = getIntWithinRange(sc, "Enter number of cents 0-99: ", 0, 99);
 			
 			//steps through coin values subtracting the largest possible and incrementing its count
 			while (cents > 0) {
@@ -41,12 +40,59 @@ public class ChangeCalculatorApp {
 			System.out.println("Nickels: " + ncount);
 			System.out.println("Pennies: " + pcount);
 			
-			System.out.print("\nContinue? (y/n): ");
-			choice = sc.next();
-			System.out.println();
+			choice = yOrNo(sc, "\nContinue? (y/n): ");
 		}
 		sc.close();
 
 	}
+	
+	private static String yOrNo(Scanner sc, String prompt) {
+		String choice = "";
+		while (true) {
+			System.out.print(prompt);
+			choice = sc.nextLine();
+			if (choice.equalsIgnoreCase("y") || choice.equalsIgnoreCase("n")) {
+				break;
+			} else {
+				System.out.println("\nError! Must enter y or n. Try again.");
+			}
+		}
+		System.out.println();
+		return choice;
+	}	
+	
+	public static int getIntWithinRange(Scanner sc, String prompt, int min, int max) {
+        int i = 0;
+        boolean isValid = false;
+        while (isValid == false) {
+            i = getInt(sc, prompt);
+            if (i <= min) {
+                System.out.println(
+                        "\nError! Number must be greater than " + min + ".\n");
+            } else if (i >= max) {
+                System.out.println(
+                        "\nError! Number must be less than " + max + ".\n");
+            } else {
+                isValid = true;
+            }
+        }
+        return i;
+    }
+
+	public static int getInt(Scanner sc, String prompt) {
+        int i = 0;
+        boolean isValid = false;
+        while (isValid == false) {
+            System.out.print(prompt);
+            if (sc.hasNextInt()) {
+                i = sc.nextInt();
+                isValid = true;
+            } else {
+                System.out.println("\nError! Invalid integer. Try again.\n");
+            }
+            sc.nextLine();  
+        }
+        return i;
+    }
 
 }

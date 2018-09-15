@@ -1,20 +1,11 @@
 package acalc;
 
-public class Rectangle extends Shape {
-	private double width;
+public class Rectangle extends Square {
 	private double height;
 	
 	public Rectangle(Double width, Double height) {
-		this.width = width;
+		super(width);
 		this.height = height;
-	}
-
-	public double getWidth() {
-		return width;
-	}
-
-	public void setWidth(double width) {
-		this.width = width;
 	}
 
 	public double getHeight() {
@@ -27,9 +18,6 @@ public class Rectangle extends Shape {
 
 	@Override
 	double getArea() {
-		return width*height;
+		return super.getWidth()*height;
 	}
-	
-	
-
 }

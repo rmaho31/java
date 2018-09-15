@@ -1,6 +1,6 @@
 package abca;
 
-public class Account implements Withdrawable, Depositable, Balanceable {
+abstract class Account implements Withdrawable, Depositable, Balanceable {
 	private double balance;
 	
 	public Account() {

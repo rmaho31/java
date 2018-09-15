@@ -19,8 +19,4 @@ public class Square extends Shape{
 	double getArea() {
 		return width*width;
 	}
-	
-	
-	
-
 }

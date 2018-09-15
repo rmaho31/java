@@ -19,8 +19,6 @@ public class AnimalCounterApp {
 		s2.setName("Dolly");
 		count(s2, 2);
 		count(s1,1);
-		
-
 	}
 	
 	public static void count(Countable c, int maxcount) {

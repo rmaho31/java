@@ -1,14 +1,14 @@
 package abca;
 
 public class SavingsAccount extends Account {
-	Double rate;
-	Double payment;
+	double rate;
+	double payment;
 	
 	public SavingsAccount(Double rate) {
 		this.rate = rate;
 	}
 
-	public Double getRate() {
+	public double getRate() {
 		return rate;
 	}
 
@@ -16,12 +16,16 @@ public class SavingsAccount extends Account {
 		this.rate = rate;
 	}
 
-	public Double getPayment() {
-		payment = super.getBalance()*rate;
+	public double getPayment() {
 		return payment;
 	}
+	
+	public void setPayment(double payment) {
+		this.payment = payment;
+	}
 
-	public void addPayment() {
+	public void applyPayment() {
+		setPayment(super.getBalance()*rate);
 		super.setBalance(super.getBalance() + payment);
 	}
 	

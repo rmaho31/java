@@ -29,6 +29,7 @@ public class DiceRollerApp {
 			choice = yOrNo(sc,"\nRoll the dice? (y/n): ");
 		}
 	}
+	
 	public static int getDieRoll() {
 		return (int) (Math.random()*6) + 1;
 	}

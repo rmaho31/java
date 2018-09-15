@@ -1,5 +1,6 @@
 package bstat;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Console {

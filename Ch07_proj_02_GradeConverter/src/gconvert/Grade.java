@@ -10,19 +10,6 @@ public class Grade {
 	
 	public Grade(int number) {
 		Grade.number = number;
-		if (number >= 88 && number <= 100) {
-			letter = "A"; 	
-		} else if (number >= 80) {
-			letter = "B";
-		} else if (number >=67) {
-			letter = "C";
-		} else if (number >= 60) {
-			letter = "D";
-		} else if (number <= 59) {
-			letter = "F";
-		} else { 
-			letter = "Not a Valid grade range!";
-		}
 	}
 
 	/**
@@ -36,6 +23,19 @@ public class Grade {
 	 * @return the letter
 	 */
 	public String getLetter() {
+		if (number >= 88) {
+			letter = "A"; 	
+		} else if (number >= 80) {
+			letter = "B";
+		} else if (number >=67) {
+			letter = "C";
+		} else if (number >= 60) {
+			letter = "D";
+		} else if (number <= 59) {
+			letter = "F";
+		} else { 
+			letter = "Not a Valid grade range!";
+		}
 		return letter;
 	}
 

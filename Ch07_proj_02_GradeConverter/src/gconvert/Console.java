@@ -3,11 +3,13 @@ package gconvert;
 import java.util.Scanner;
 
 public class Console {
-	public static double getDouble(Scanner sc, String prompt, double min, double max) {
+	private static Scanner sc = new Scanner(System.in);
+	
+	public static double getDouble(String prompt, double min, double max) {
         double d = 0.0;
         boolean isValid = false;
         while (!isValid) {
-            d = getDouble(sc, prompt);
+            d = getDouble(prompt);
             if (d <= min) {
                 System.out.println(
                         "\nError! Number must be greater than or equal to " + min + ".\n");
@@ -21,7 +23,7 @@ public class Console {
         return d;
     }
 
-    public static int getInt(Scanner sc, String prompt) {
+    public static int getInt(String prompt) {
         int i = 0;
         boolean isValid = false;
         while (!isValid) {
@@ -37,11 +39,11 @@ public class Console {
         return i;
     }
 
-    public static int getInt(Scanner sc, String prompt, int min, int max) {
+    public static int getInt(String prompt, int min, int max) {
         int i = 0;
         boolean isValid = false;
         while (!isValid) {
-            i = getInt(sc, prompt);
+            i = getInt(prompt);
             if (i < min) {
                 System.out.println(
                         "\nError! Number must be greater than or equal to " + min + ".\n");
@@ -55,7 +57,7 @@ public class Console {
         return i;
     }
     
-    public static double getDouble(Scanner sc, String prompt) {
+    public static double getDouble(String prompt) {
         double d = 0.0;
         boolean isValid = false;
         while (!isValid) {
@@ -71,7 +73,7 @@ public class Console {
         return d;
     }
     
-    public static String getString(Scanner sc, String prompt) {
+    public static String getString(String prompt) {
 		String text = "";
 		Boolean isValid = false;
 		while (!isValid) {
@@ -86,23 +88,31 @@ public class Console {
 		return text;
 	}
     
-    public static String getString(Scanner sc, String prompt, String s1, String s2) {
+    public static String getString(String prompt, String s1, String s2) {
 		String s = "";
     	Boolean isValid = false;
 		while (!isValid) {
-			System.out.print(prompt);
-			s = sc.nextLine();
-			if (!s.equalsIgnoreCase("y") && !s.equalsIgnoreCase("n")) {
+			s = getString(prompt);
+			if (!s.equalsIgnoreCase(s1) && !s.equalsIgnoreCase(s2)) {
 				System.out.println("\nError! Entry must be '" + s1 + "' or '" + s2 + "'. Try again.");
 			} else {
 				isValid = true;
-				System.out.println();
+			}
+		}
+		return s;
+	}
+    
+    public static String getString(String prompt, String s1, String s2, String s3) {
+		String s = "";
+    	Boolean isValid = false;
+		while (!isValid) {
+			s = getString(prompt);
+			if (!s.equalsIgnoreCase(s1) && !s.equalsIgnoreCase(s2) && !s.equalsIgnoreCase(s3)) {
+				System.out.println("\nError! Entry must be '" + s1 + "' or '" + s2 + "'. Try again.");
+			} else {
+				isValid = true;
 			}
 		}
 		return s;
 	}	
 }
-
-
-
-

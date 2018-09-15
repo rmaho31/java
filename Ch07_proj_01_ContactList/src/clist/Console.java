@@ -3,17 +3,19 @@ package clist;
 import java.util.Scanner;
 
 public class Console {
-	public static double getDouble(Scanner sc, String prompt, double min, double max) {
+	private static Scanner sc = new Scanner(System.in);
+	
+	public static double getDouble(String prompt, double min, double max) {
         double d = 0.0;
         boolean isValid = false;
         while (!isValid) {
-            d = getDouble(sc, prompt);
+            d = getDouble(prompt);
             if (d <= min) {
                 System.out.println(
-                        "\nError! Number must be greater than " + min + ".\n");
+                        "\nError! Number must be greater than or equal to " + min + ".\n");
             } else if (d >= max) {
                 System.out.println(
-                        "\nError! Number must be less than " + max + ".\n");
+                        "\nError! Number must be less than or equal to " + max + ".\n");
             } else {
                 isValid = true;
             }
@@ -21,7 +23,7 @@ public class Console {
         return d;
     }
 
-    public static int getInt(Scanner sc, String prompt) {
+    public static int getInt(String prompt) {
         int i = 0;
         boolean isValid = false;
         while (!isValid) {
@@ -37,17 +39,17 @@ public class Console {
         return i;
     }
 
-    public static int getInt(Scanner sc, String prompt, int min, int max) {
+    public static int getInt(String prompt, int min, int max) {
         int i = 0;
         boolean isValid = false;
         while (!isValid) {
-            i = getInt(sc, prompt);
-            if (i <= min) {
+            i = getInt(prompt);
+            if (i < min) {
                 System.out.println(
-                        "\nError! Number must be greater than " + min + ".\n");
-            } else if (i >= max) {
+                        "\nError! Number must be greater than or equal to " + min + ".\n");
+            } else if (i > max) {
                 System.out.println(
-                        "\nError! Number must be less than " + max + ".\n");
+                        "\nError! Number must be less than or equal to " + max + ".\n");
             } else {
                 isValid = true;
             }
@@ -55,7 +57,7 @@ public class Console {
         return i;
     }
     
-    public static double getDouble(Scanner sc, String prompt) {
+    public static double getDouble(String prompt) {
         double d = 0.0;
         boolean isValid = false;
         while (!isValid) {
@@ -71,7 +73,7 @@ public class Console {
         return d;
     }
     
-    public static String getString(Scanner sc, String prompt) {
+    public static String getString(String prompt) {
 		String text = "";
 		Boolean isValid = false;
 		while (!isValid) {
@@ -86,20 +88,32 @@ public class Console {
 		return text;
 	}
     
-    public static String getString(Scanner sc, String prompt, String choice) {
-		Boolean isValid = false;
+    public static String getString(String prompt, String s1, String s2) {
+		String s = "";
+    	Boolean isValid = false;
 		while (!isValid) {
-			System.out.print(prompt);
-			choice = sc.nextLine();
-			if (choice.equalsIgnoreCase("y") || choice.equalsIgnoreCase("n")) {
-				isValid = true;
-				System.out.println();
+			s = getString(prompt);
+			if (!s.equalsIgnoreCase(s1) && !s.equalsIgnoreCase(s2)) {
+				System.out.println("\nError! Entry must be '" + s1 + "' or '" + s2 + "'. Try again.");
 			} else {
-				System.out.println("\nError! Must enter y or n. Try again.");
+				isValid = true;
 			}
 		}
-		return choice;
+		return s;
+	}
+    
+    public static String getString(String prompt, String s1, String s2, String s3) {
+		String s = "";
+    	Boolean isValid = false;
+		while (!isValid) {
+			s = getString(prompt);
+			if (!s.equalsIgnoreCase(s1) && !s.equalsIgnoreCase(s2) && !s.equalsIgnoreCase(s3)) {
+				System.out.println("\nError! Entry must be '" + s1 + "' or '" + s2 + "'. Try again.");
+			} else {
+				isValid = true;
+			}
+		}
+		return s;
 	}	
 }
-
 
