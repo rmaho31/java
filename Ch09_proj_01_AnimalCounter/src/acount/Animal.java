@@ -1,10 +1,16 @@
 package acount;
 
 public abstract class Animal implements Countable {
-	int counter;
-	
-	public Animal() {
-		
+	private int counter;
+
+	public int getCounter() {
+		return counter;
 	}
+
+	public void setCounter(int counter) {
+		this.counter = counter;
+	}
+	
+	
 	
 }

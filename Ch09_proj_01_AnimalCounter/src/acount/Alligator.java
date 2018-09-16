@@ -3,25 +3,23 @@ package acount;
 public class Alligator extends Animal {
 	
 	public Alligator () {
-		super();
 	}
 
 	@Override
 	public void incrementCount() {
-		counter++;
+		setCounter(getCounter() + 1);
 		
 	}
 
 	@Override
 	public void resetCount() {
-		counter = 0;
+		setCounter(0);
 		
 	}
 
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
-		return super.counter;
+		return super.getCounter();
 	}
 
 	@Override

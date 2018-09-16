@@ -4,23 +4,22 @@ public class Sheep extends Animal implements Cloneable{
 	private String name;
 	
 	public Sheep(String name) {
-		super();
 		this.name = name;
 	}
 
 	@Override
 	public void incrementCount() {
-		counter++;		
+		setCounter(getCounter() + 1);		
 	}
 
 	@Override
 	public void resetCount() {
-		counter = 0;
+		setCounter(0);
 	}
 
 	@Override
 	public int getCount() {
-		return counter;
+		return getCounter();
 	}
 
 	@Override
