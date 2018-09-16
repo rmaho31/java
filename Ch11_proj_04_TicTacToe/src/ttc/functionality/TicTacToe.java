@@ -8,8 +8,9 @@ public class TicTacToe {
 	private String[][] ttt;
 	private String gameBoard;
 	private int size;
+	private String cpu;
 	
-	public TicTacToe(int size) {
+	public TicTacToe(int size, String cpu) {
 		//initialize players with proper String values
 		p = new Player[] {new Player("X", size), new Player("O", size)};		
 		
@@ -33,6 +34,7 @@ public class TicTacToe {
 				gameBoard += lines + middle + lines;
 			} 
 		}
+		this.cpu = cpu;
 	}
 
 	
@@ -55,21 +57,49 @@ public class TicTacToe {
 		while(!isValid) {
 			int row = 0;
 			int column = 0;
-					
-			Console.println(p[i].getLetter()  + "'s turn");
 			
 			boolean isValid2 = false;
-			while(!isValid2) {
-				row = Console.getInt("Pick a row: (1,2,3...): ", 0, size + 1) - 1;
-				column = Console.getInt("Pick a column: (1, 2, 3...): ", 0, size + 1) - 1;
-				if(ttt[row][column].equals(" ")) {
-					isValid2 = true;
-					ttt[row][column] = p[i].getLetter();
-					updateGameboard();
-					Console.println(gameBoard);
-				} else {
-					Console.println("\nSomeone has Placed here already Try again!");
-					Console.println(gameBoard);
+			if(i == 1 && cpu.equalsIgnoreCase("y")) {
+				Console.println(p[i].getLetter()  + "'s turn");
+				while(!isValid2) {
+					if(counter < 3 && ttt[1][1].equals(" ") && size == 3) {
+						row = 1;
+						column = 1;
+						ttt[row][column] = p[i].getLetter();
+						isValid2 = true;
+						updateGameboard();
+						Console.println(gameBoard);
+					} else {
+						int[] coord = cpuChoice(p);
+						row = coord[0];
+						column = coord[1];
+						if(ttt[row][column].equals(" ")) {
+							isValid2 = true;
+							ttt[row][column] = p[i].getLetter();
+							updateGameboard();
+							Console.println(gameBoard);
+						} 
+						
+					}
+				}
+			}
+			
+			if(i == 1 && cpu.equalsIgnoreCase("n") || i == 0) {
+				Console.println(p[i].getLetter()  + "'s turn");
+				
+				isValid2 = false;
+				while(!isValid2) {
+					row = Console.getInt("Pick a row: (1,2,3...): ", 0, size + 1) - 1;
+					column = Console.getInt("Pick a column: (1, 2, 3...): ", 0, size + 1) - 1;
+					if(ttt[row][column].equals(" ")) {
+						isValid2 = true;
+						ttt[row][column] = p[i].getLetter();
+						updateGameboard();
+						Console.println(gameBoard);
+					} else {
+						Console.println("\nSomeone has Placed here already Try again!");
+						Console.println(gameBoard);
+					}				
 				}
 			}
 			
@@ -142,58 +172,107 @@ public class TicTacToe {
 		}
 	}
 	
-	/**
-	 * @return the p
-	 */
+	public int[] cpuChoice(Player[] p) {
+		int rowIndexMax = 0;
+		int colIndexMax = 0;
+		int diagIndexMax = 0;
+		int max = 0;
+		int coord[] = new int[2];
+		int rowWin = -1;
+		int colWin = -1;
+		int diagWin = -1;
+		for(int i = 0; i < size; i++) {
+			if(p[0].getRowSums()[i] > max && p[1].getRowSums()[i] + p[0].getRowSums()[i] != size) {
+				max = p[0].getRowSums()[i];
+				rowIndexMax = i;
+			}
+			if(p[1].getRowSums()[i] + p[0].getRowSums()[i] != size && p[1].getRowSums()[i] == size - 1) {
+				rowWin = i;
+			}
+		}
+		max = 0;
+		for(int i = 0; i < size; i++) {
+			if(p[0].getColumnSums()[i] > max && p[1].getColumnSums()[i] + p[0].getColumnSums()[i] != size) {
+				max = p[0].getColumnSums()[i];
+				colIndexMax = i;
+			}
+			if(p[1].getColumnSums()[i] + p[0].getColumnSums()[i] != size && p[1].getColumnSums()[i] == size - 1) {
+				colWin = i;
+			}
+		}
+		max = 0;
+		for(int i = 0; i < 2; i++) {
+			if(p[0].getDiagonalSums()[i] > max && p[1].getDiagonalSums()[i] + p[0].getDiagonalSums()[i] != size) {
+				max = p[0].getDiagonalSums()[i];
+				diagIndexMax = i;
+			}
+			if(p[1].getDiagonalSums()[i] + p[0].getDiagonalSums()[i] != size && p[1].getDiagonalSums()[i] == size - 1) {
+				diagWin = i;
+			}
+		}
+		
+		if(rowWin != -1) {
+			coord[0] = rowWin;
+			coord[1] = (int) (Math.random()*size);			
+		} else if(colWin != -1) {
+			coord[0] = (int) (Math.random()*size);
+			coord[1] = colWin;			
+		} else if(diagWin != -1) {
+			if(diagWin == 0) {
+				coord[0] = (int) (Math.random()*size);
+				coord[1] = coord[0];
+			} else {
+				coord[1] = (int) (Math.random()*size);
+				coord[0] = size - coord[1] - 1;
+			}
+			
+		} else if(p[0].getRowSums()[rowIndexMax] > p[0].getDiagonalSums()[diagIndexMax] && p[0].getRowSums()[rowIndexMax] > p[0].getColumnSums()[colIndexMax]) {
+			coord[0] = rowIndexMax;
+			coord[1] = (int) (Math.random()*size);
+		} else if(p[0].getColumnSums()[colIndexMax] > p[0].getDiagonalSums()[diagIndexMax]) {
+			coord[0] = (int) (Math.random()*size);
+			coord[1] = colIndexMax;
+		}  else if (diagIndexMax == 0 && p[1].getDiagonalSums()[0] + p[0].getDiagonalSums()[0] != size){
+			coord[0] = (int) (Math.random()*size);
+			coord[1] = coord[0];
+		} else if (p[0].getDiagonalSums()[1] + p[1].getDiagonalSums()[1] != size) {
+			coord[1] = (int) (Math.random()*size);
+			coord[0] = size - coord[1] - 1;
+		} else {
+			coord[0] = (int) (Math.random()*size);
+			coord[1] = (int) (Math.random()*size);
+		}
+		return coord;
+	}
+	
 	public Player[] getP() {
 		return p;
 	}
 
-	/**
-	 * @param p the p to set
-	 */
 	public void setP(Player[] p) {
 		this.p = p;
 	}
 
-	/**
-	 * @return the ttt
-	 */
 	public String[][] getTtt() {
 		return ttt;
 	}
 
-	/**
-	 * @param ttt the ttt to set
-	 */
 	public void setTtt(String[][] ttt) {
 		this.ttt = ttt;
 	}
 
-	/**
-	 * @return the gameBoard
-	 */
 	public String getGameBoard() {
 		return gameBoard;
 	}
 
-	/**
-	 * @param gameBoard the gameBoard to set
-	 */
 	public void setGameBoard(String gameBoard) {
 		this.gameBoard = gameBoard;
 	}
 	
-	/**
-	 * @return the size
-	 */
 	public int getSize() {
 		return size;
 	}
 
-	/**
-	 * @param size the size to set
-	 */
 	public void setSize(int size) {
 		this.size = size;
 	}

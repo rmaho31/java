@@ -12,10 +12,11 @@ public class TicTacToeApp {
 		String choice = "y";
 		while(choice.equalsIgnoreCase("y")) {
 			//declare and initialize game instance with size of game
-			TicTacToe ttt = new TicTacToe(Console.getInt("Enter the size of the table: ", 0, Integer.MAX_VALUE));
+			TicTacToe ttt = new TicTacToe(Console.getInt("Enter the size of the table: ", 0, Integer.MAX_VALUE),
+										  Console.getString("Do you want to play the cpu? (y/n): ", "y", "n"));
 			
 			/* 
-			 * initializes the TicTacToe game check TicTacToe class for methods
+			 * Let the game begin
 			 */
 			ttt.beginGame();
 			
@@ -24,6 +25,4 @@ public class TicTacToeApp {
 		
 		Console.println("Bye - Thanks for playing!");
 	}
-	
-	
 }
