@@ -102,10 +102,15 @@ public class TicTacToe {
 					}				
 				}
 			}
-			
+			counter++;
+			//checks the winner and if no winner and the board is filled it's a tie
 			isValid = checkWinner(row, column, size, p[i]);
 			if(isValid == true) {
 				Console.println(p[i].getLetter() + "'s Win!\n\nGame Over.\n");
+			} else if(counter == size*size) {
+				Console.println("The Game is a Tie!\n" +
+						"\nGame Over!\n");
+				isValid = true;
 			}
 			
 			//player switch
@@ -113,15 +118,7 @@ public class TicTacToe {
 				i--;
 			} else {
 				i++;
-			}
-			
-			//if the game reaches this point it's a tie and the game ends
-			counter++;
-			if(counter == size*size && isValid == false) {
-				Console.println("The Game is a Tie!\n" +
-								"\nGame Over!\n");
-				isValid = true;
-			}
+			}			
 		}
 	}
 	
@@ -172,42 +169,41 @@ public class TicTacToe {
 		}
 	}
 	
+	//cpu player logic
 	public int[] cpuChoice(Player[] p) {
 		int rowIndexMax = 0;
 		int colIndexMax = 0;
 		int diagIndexMax = 0;
-		int max = -1;
+		int maxRow = -1;
+		int maxCol = -1;
+		int maxDiag = -1;
 		int coord[] = new int[2];
 		int rowWin = -1;
 		int colWin = -1;
 		int diagWin = -1;
 		for(int i = 0; i < size; i++) {
-			if(p[0].getRowSums()[i] > max && p[1].getRowSums()[i] + p[0].getRowSums()[i] != size) {
-				max = p[0].getRowSums()[i];
+			if(p[0].getRowSums()[i] > maxRow && p[1].getRowSums()[i] + p[0].getRowSums()[i] != size) {
+				maxRow = p[0].getRowSums()[i];
 				rowIndexMax = i;
 			}
 			if(p[1].getRowSums()[i] + p[0].getRowSums()[i] != size && p[1].getRowSums()[i] == size - 1) {
 				rowWin = i;
 			}
-		}
-		max = -1;
-		for(int i = 0; i < size; i++) {
-			if(p[0].getColumnSums()[i] > max && p[1].getColumnSums()[i] + p[0].getColumnSums()[i] != size) {
-				max = p[0].getColumnSums()[i];
+			if(p[0].getColumnSums()[i] > maxCol && p[1].getColumnSums()[i] + p[0].getColumnSums()[i] != size) {
+				maxCol = p[0].getColumnSums()[i];
 				colIndexMax = i;
 			}
 			if(p[1].getColumnSums()[i] + p[0].getColumnSums()[i] != size && p[1].getColumnSums()[i] == size - 1) {
 				colWin = i;
 			}
-		}
-		max = -1;
-		for(int i = 0; i < 2; i++) {
-			if(p[0].getDiagonalSums()[i] > max && p[1].getDiagonalSums()[i] + p[0].getDiagonalSums()[i] != size) {
-				max = p[0].getDiagonalSums()[i];
-				diagIndexMax = i;
-			}
-			if(p[1].getDiagonalSums()[i] + p[0].getDiagonalSums()[i] != size && p[1].getDiagonalSums()[i] == size - 1) {
-				diagWin = i;
+			if (i < 2) {
+				if(p[0].getDiagonalSums()[i] > maxDiag && p[1].getDiagonalSums()[i] + p[0].getDiagonalSums()[i] != size) {
+					maxDiag = p[0].getDiagonalSums()[i];
+					diagIndexMax = i;
+				}
+				if(p[1].getDiagonalSums()[i] + p[0].getDiagonalSums()[i] != size && p[1].getDiagonalSums()[i] == size - 1) {
+					diagWin = i;
+				}
 			}
 		}
 		
@@ -224,8 +220,7 @@ public class TicTacToe {
 			} else {
 				coord[1] = (int) (Math.random()*size);
 				coord[0] = size - coord[1] - 1;
-			}
-			
+			}	
 		} else if(p[0].getRowSums()[rowIndexMax] > p[0].getDiagonalSums()[diagIndexMax] && p[0].getRowSums()[rowIndexMax] > p[0].getColumnSums()[colIndexMax]) {
 			coord[0] = rowIndexMax;
 			coord[1] = (int) (Math.random()*size);
