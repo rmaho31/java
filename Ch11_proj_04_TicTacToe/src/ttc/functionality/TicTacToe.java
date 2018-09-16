@@ -176,7 +176,7 @@ public class TicTacToe {
 		int rowIndexMax = 0;
 		int colIndexMax = 0;
 		int diagIndexMax = 0;
-		int max = 0;
+		int max = -1;
 		int coord[] = new int[2];
 		int rowWin = -1;
 		int colWin = -1;
@@ -190,7 +190,7 @@ public class TicTacToe {
 				rowWin = i;
 			}
 		}
-		max = 0;
+		max = -1;
 		for(int i = 0; i < size; i++) {
 			if(p[0].getColumnSums()[i] > max && p[1].getColumnSums()[i] + p[0].getColumnSums()[i] != size) {
 				max = p[0].getColumnSums()[i];
@@ -200,7 +200,7 @@ public class TicTacToe {
 				colWin = i;
 			}
 		}
-		max = 0;
+		max = -1;
 		for(int i = 0; i < 2; i++) {
 			if(p[0].getDiagonalSums()[i] > max && p[1].getDiagonalSums()[i] + p[0].getDiagonalSums()[i] != size) {
 				max = p[0].getDiagonalSums()[i];
