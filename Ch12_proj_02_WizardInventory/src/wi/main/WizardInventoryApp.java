@@ -42,17 +42,23 @@ public class WizardInventoryApp {
 					Console.println("You can't carry any more items. Drop something first");
 				}
 			} else if(cmd.equalsIgnoreCase("edit")) {
-				int index = Console.getInt("Number: ", -1, i.getInventory().size());
-				String item = Console.getString("Updated name: ");
-				i.editItem(index, item);
+				if(i.getInventory().size() > 0) {
+					int index = Console.getInt("Number: ", -1, i.getInventory().size());
+					String item = Console.getString("Updated name: ");
+					i.editItem(index, item);
+				} else {
+					Console.println("You must add items to the Inventory first!");					
+				}
 			} else if(cmd.equalsIgnoreCase("drop")) {
-				int index = Console.getInt("Number: ", -1, i.getInventory().size());
-				i.deleteItem(index);
+				if(i.getInventory().size() > 0) {
+					int index = Console.getInt("Number: ", -1, i.getInventory().size());
+					i.deleteItem(index);
+				} else {
+					Console.println("You must add items to the Inventory first!");
+				}
 			} else if(cmd.equalsIgnoreCase("exit")) {
 				choice = "exit";
 			}
 		}
-
 	}
-
 }
