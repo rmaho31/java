@@ -61,25 +61,15 @@ public class TicTacToe {
 			boolean isValid2 = false;
 			if(i == 1 && cpu.equalsIgnoreCase("y")) {
 				Console.println(p[i].getLetter()  + "'s turn");
-				while(!isValid2) {
-					if(counter < 3 && ttt[1][1].equals(" ") && size == 3) {
-						row = 1;
-						column = 1;
-						ttt[row][column] = p[i].getLetter();
+				while(!isValid2) {					
+					int[] coord = cpuChoice(p, counter);
+					row = coord[0];
+					column = coord[1];
+					if(ttt[row][column].equals(" ")) {
 						isValid2 = true;
+						ttt[row][column] = p[i].getLetter();
 						updateGameboard();
-						Console.println(gameBoard);
-					} else {
-						int[] coord = cpuChoice(p);
-						row = coord[0];
-						column = coord[1];
-						if(ttt[row][column].equals(" ")) {
-							isValid2 = true;
-							ttt[row][column] = p[i].getLetter();
-							updateGameboard();
-							Console.println(gameBoard);
-						} 
-						
+						Console.println(gameBoard);				
 					}
 				}
 			}
@@ -170,7 +160,7 @@ public class TicTacToe {
 	}
 	
 	//cpu player logic
-	public int[] cpuChoice(Player[] p) {
+	public int[] cpuChoice(Player[] p, int counter) {
 		int rowIndexMax = 0;
 		int colIndexMax = 0;
 		int diagIndexMax = 0;
@@ -207,7 +197,24 @@ public class TicTacToe {
 			}
 		}
 		
-		if(rowWin != -1) {
+		if(counter < 2 && size == 3 && p[0].getDiagonalSums()[0] + p[0].getDiagonalSums()[1] != 2) {
+			coord[0] = 1;
+			coord[1] = 1;			
+		} else if(counter < 2 && size == 3 && p[0].getDiagonalSums()[0] + p[0].getDiagonalSums()[1] == 2) {
+			if((int) Math.random() == 1) {
+				coord[0] = (int) (Math.random()*size);
+				coord[1] = coord[0];			
+			} else {
+				coord[1] = (int) (Math.random()*size);
+				coord[0] = size - coord[1] - 1;	
+			}
+		} else if(counter < 4 && size == 3 && p[0].getDiagonalSums()[0] + p[1].getDiagonalSums()[0] == size) {
+			coord[1] = (int) (Math.random()*size);
+			coord[0] = size - coord[1] - 1;		
+		} else if(counter < 4 && size == 3 && p[0].getDiagonalSums()[1] + p[1].getDiagonalSums()[1] == size) {
+			coord[0] = (int) (Math.random()*size);
+			coord[1] = coord[0];
+		} else if(rowWin != -1) {
 			coord[0] = rowWin;
 			coord[1] = (int) (Math.random()*size);			
 		} else if(colWin != -1) {
@@ -221,18 +228,27 @@ public class TicTacToe {
 				coord[1] = (int) (Math.random()*size);
 				coord[0] = size - coord[1] - 1;
 			}	
-		} else if(p[0].getRowSums()[rowIndexMax] > p[0].getDiagonalSums()[diagIndexMax] && p[0].getRowSums()[rowIndexMax] > p[0].getColumnSums()[colIndexMax]) {
+		} else if(p[1].getDiagonalSums()[0] + p[0].getDiagonalSums()[0] == size && p[1].getDiagonalSums()[1] + p[0].getDiagonalSums()[1] == 1 && size == 3 &&
+				p[1].getRowSums()[1] + p[0].getRowSums()[1] != size || p[1].getRowSums()[1] + p[0].getRowSums()[1] != size &&
+				p[1].getDiagonalSums()[1] + p[0].getDiagonalSums()[1] == size && p[1].getDiagonalSums()[1] + p[0].getDiagonalSums()[0] == 1 && size == 3 ) {
+			coord[0] = 1;
+			coord[1] = (int) (Math.random()*size);
+		} else if (p[0].getDiagonalSums()[diagIndexMax] > p[0].getRowSums()[rowIndexMax] && 
+				   p[0].getDiagonalSums()[diagIndexMax] > p[0].getColumnSums()[colIndexMax]){
+			if(diagIndexMax == 0) {
+				coord[0] = (int) (Math.random()*size);
+				coord[1] = coord[0];
+			} else {
+				coord[1] = (int) (Math.random()*size);
+				coord[0] = size - coord[1] - 1;	
+			}
+		} else if(p[0].getRowSums()[rowIndexMax] >  p[0].getColumnSums()[colIndexMax]) {
 			coord[0] = rowIndexMax;
 			coord[1] = (int) (Math.random()*size);
-		} else if(p[0].getColumnSums()[colIndexMax] > p[0].getDiagonalSums()[diagIndexMax]) {
+		} else if(p[0].getColumnSums()[colIndexMax] > p[0].getRowSums()[diagIndexMax]) {
 			coord[0] = (int) (Math.random()*size);
 			coord[1] = colIndexMax;
-		}  else if (diagIndexMax == 0 && p[1].getDiagonalSums()[0] + p[0].getDiagonalSums()[0] != size){
-			coord[0] = (int) (Math.random()*size);
-			coord[1] = coord[0];
-		} else if (p[0].getDiagonalSums()[1] + p[1].getDiagonalSums()[1] != size) {
-			coord[1] = (int) (Math.random()*size);
-			coord[0] = size - coord[1] - 1;
+		
 		} else {
 			coord[0] = (int) (Math.random()*size);
 			coord[1] = (int) (Math.random()*size);
