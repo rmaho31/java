@@ -9,27 +9,29 @@ public class PigLatinTranslatorApp {
 		
 		String line = Console.getString("Enter a line: ");
 		
-		String[] words = line.split(" ");
-		String pigLatin = "";
-		for(int i = 0; i < words.length; i++) {
-			pigLatin += translatePigLatin(words[i]) + " ";
-		}
+		String pigLatin = translatePigLatin(line);
 		
 		Console.print(pigLatin);
 	}
 	
-	public static String translatePigLatin(String word) {
-		if(!word.matches(".*[\\d@$#].*")) {
-			word = word.toLowerCase();
-			word = word.replaceAll("[\\.,!\"]$", "");
-			if(word.matches("^[aeiou].*")) {
-				word = word + "way";
-			} else {
-				String begin = word.replaceAll("^[^aeiou][^aeiouy]*", "");
-				String end = word.substring(0, word.length() - begin.length());
-				word = begin + end + "ay";
-			}			
+	public static String translatePigLatin(String line) {
+		String[] words = line.split(" ");
+		String pigLatin = "";
+		for(int i = 0; i < words.length; i++) {
+			words[i] = words[i].toLowerCase();
+			if(!words[i].matches(".*[\\d@$#].*")) {
+				words[i] = words[i].replaceAll("[\\.,:;!\"]$", "");
+				if(words[i].matches("^[aeiou].*")) {
+					words[i] = words[i] + "way";
+				} else {
+					String begin = words[i].replaceAll("^[^aeiou][^aeiouy]*", "");
+					String end = words[i].substring(0, words[i].length() - begin.length());
+					words[i] = begin + end + "ay";
+				}			
+			pigLatin += words[i] + " ";
+			}
 		}
-		return word;
+		return pigLatin;
 	}
+
 }
