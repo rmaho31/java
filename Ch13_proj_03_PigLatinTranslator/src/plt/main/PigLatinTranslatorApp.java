@@ -20,7 +20,7 @@ public class PigLatinTranslatorApp {
 		for(int i = 0; i < words.length; i++) {
 			words[i] = words[i].toLowerCase();
 			if(!words[i].matches(".*[\\d@$#].*")) {
-				words[i] = words[i].replaceAll("[\\.,:;!\"]$", "");
+				words[i] = words[i].replaceAll("[\\.,:;!\"]+$", "");
 				if(words[i].matches("^[aeiou].*")) {
 					words[i] = words[i] + "way";
 				} else {
