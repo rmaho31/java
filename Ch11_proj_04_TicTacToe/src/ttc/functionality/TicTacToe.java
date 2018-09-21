@@ -1,6 +1,11 @@
 package ttc.functionality;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.NoSuchElementException;
+
 import ttc.players.Player;
+import ttc.players.Score;
 import ttc.utility.Console;
 
 public class TicTacToe {
@@ -9,11 +14,13 @@ public class TicTacToe {
 	private String gameBoard;
 	private int size;
 	private String cpu;
+	private Score s;
+	private String difficulty;
 	
-	public TicTacToe(int size, String cpu) {
+	public TicTacToe(int size, String cpu, String difficulty) {
 		//initialize players with proper String values
 		p = new Player[] {new Player("X", size), new Player("O", size)};		
-		
+		s = new Score(size);
 		this.size = size;
 		//fills array with spaces and builds the game board
 		ttt = new String[size][size];
@@ -35,6 +42,7 @@ public class TicTacToe {
 			} 
 		}
 		this.cpu = cpu;
+		this.difficulty = difficulty;
 	}
 
 	
@@ -61,10 +69,19 @@ public class TicTacToe {
 			boolean isValid2 = false;
 			if(i == 1 && cpu.equalsIgnoreCase("y")) {
 				Console.println(p[i].getLetter()  + "'s turn");
-				while(!isValid2) {					
-					int[] coord = cpuChoice(p, counter);
-					row = coord[0];
-					column = coord[1];
+				while(!isValid2) {
+					int coord[];
+					if(difficulty.equals("1")) {
+						coord = cpuChoice(s, counter);
+						row = coord[0];
+						column = coord[1];
+					} else {
+						ArrayList<int[]> moves = generateMoves(ttt);
+						coord = findBestMove(moves);
+						row = coord[0];
+						column = coord[1];	
+					}
+					
 					if(ttt[row][column].equals(" ")) {
 						isValid2 = true;
 						ttt[row][column] = p[i].getLetter();
@@ -76,7 +93,6 @@ public class TicTacToe {
 			
 			if(i == 1 && cpu.equalsIgnoreCase("n") || i == 0) {
 				Console.println(p[i].getLetter()  + "'s turn");
-				
 				isValid2 = false;
 				while(!isValid2) {
 					row = Console.getInt("Pick a row: (1,2,3...): ", 0, size + 1) - 1;
@@ -93,8 +109,9 @@ public class TicTacToe {
 				}
 			}
 			counter++;
+			adjustScores(row, column, size, p[i], s, ttt);
 			//checks the winner and if no winner and the board is filled it's a tie
-			isValid = checkWinner(row, column, size, p[i]);
+			isValid = checkWinner(row, column, size, p[i], s, ttt);
 			if(isValid == true) {
 				Console.println(p[i].getLetter() + "'s Win!\n\nGame Over.\n");
 			} else if(counter == size*size) {
@@ -112,28 +129,70 @@ public class TicTacToe {
 		}
 	}
 	
-	//adds to the player score counts and checks them against the size of the board
-	public boolean checkWinner(int row, int column, int size, Player p) {
-		p.incrementRowSums(row);
-		p.incrementColumnSums(column);
-		if (row == column) { 
-			p.incrementDiagonalSums(0);
+	//increments the scores
+	public void adjustScores(int row, int column, int size, Player p, Score s, String[][] ttt) {
+		boolean isOpen = true;
+		for (String cell : ttt[row]) {
+			if(!cell.equals(p.getLetter()) && !cell.equals(" ")) {
+				isOpen = false;			
+			}	
+		} if (isOpen) {
+			s.adjustRowSums(row, p);
+		} else {
+			s.setRowSums(0, row);
 		}
-		if (row == size - 1 - column) {
-			p.incrementDiagonalSums(1);
+		
+		isOpen = true;
+		for (int i = 0; i < size; i++) {
+			if(!ttt[i][column].equals(p.getLetter()) && !ttt[i][column].equals(" ")) {
+				isOpen = false;			
+			}	
+		} if (isOpen) {
+			s.adjustColumnSums(column, p);
+		} else {
+			s.setColumnSums(0, column);
 		}
-		for(int score : p.getRowSums()) {
-			if (score == size) {
+		
+		isOpen = true;
+		if(row == column) {
+			for(int i = 0, j = 0; i < size; i++, j++) {
+				if(!ttt[i][j].equals(p.getLetter()) && !ttt[i][j].equals(" ")) {
+					isOpen = false;			
+				}	
+			} if (isOpen) {
+				s.adjustDiagonalSums(0, p);
+			} else {
+				s.setDiagonalSums(0, 0);
+			}			
+		}
+		
+		if(row == size - column - 1) {
+			isOpen = true;
+			for(int i = 0, j = size - i - 1; i < size; i++, j--) {
+				if(!ttt[i][j].equals(p.getLetter()) && !ttt[i][j].equals(" ")) {
+					isOpen = false;			
+				}	
+			} if (isOpen) {
+				s.adjustDiagonalSums(1, p);
+			} else {
+				s.setDiagonalSums(0, 1);
+			}			
+		}
+	}
+	
+	public boolean checkWinner(int row, int column, int size, Player p, Score s, String[][] ttt) {
+			for(int score : s.getRowSums()) {
+			if (Math.abs(score) == Math.pow(10, size-1)) {
 				return true;
 			}
 		}
-		for(int score : p.getColumnSums()) {
-			if (score == size) {
+		for(int score : s.getColumnSums()) {
+			if (Math.abs(score) == Math.pow(10, size-1)) {
 				return true;
 			}
 		}
-		for(int score : p.getDiagonalSums()) {
-			if (score == size) {
+		for(int score : s.getDiagonalSums()) {
+			if (Math.abs(score) == Math.pow(10, size-1)) {
 				return true;
 			}
 		}
@@ -159,8 +218,8 @@ public class TicTacToe {
 		}
 	}
 	
-	//cpu player logic
-	public int[] cpuChoice(Player[] p, int counter) {
+	//cpu player logic first try
+	public int[] cpuChoice(Score s, int counter) {
 		int rowIndexMax = 0;
 		int colIndexMax = 0;
 		int diagIndexMax = 0;
@@ -168,59 +227,42 @@ public class TicTacToe {
 		int maxCol = -1;
 		int maxDiag = -1;
 		int coord[] = new int[2];
-		int rowWin = -1;
-		int colWin = -1;
-		int diagWin = -1;
+		int rowWin = 0;
+		int colWin = 0;
+		int diagWin = 0;
 		for(int i = 0; i < size; i++) {
-			if(p[0].getRowSums()[i] > maxRow && p[1].getRowSums()[i] + p[0].getRowSums()[i] != size) {
-				maxRow = p[0].getRowSums()[i];
+			if(Math.abs(s.getRowSums()[i]) > maxRow) {
+				maxRow = s.getRowSums()[i];
 				rowIndexMax = i;
 			}
-			if(p[1].getRowSums()[i] + p[0].getRowSums()[i] != size && p[1].getRowSums()[i] == size - 1) {
+			if(s.getRowSums()[i] == -Math.pow(10, size - 2)) {
 				rowWin = i;
 			}
-			if(p[0].getColumnSums()[i] > maxCol && p[1].getColumnSums()[i] + p[0].getColumnSums()[i] != size) {
-				maxCol = p[0].getColumnSums()[i];
+			if(Math.abs(s.getColumnSums()[i]) > maxCol) {
+				maxCol = s.getColumnSums()[i];
 				colIndexMax = i;
 			}
-			if(p[1].getColumnSums()[i] + p[0].getColumnSums()[i] != size && p[1].getColumnSums()[i] == size - 1) {
+			if(s.getColumnSums()[i] == -Math.pow(10, size - 2)) {
 				colWin = i;
 			}
 			if (i < 2) {
-				if(p[0].getDiagonalSums()[i] > maxDiag && p[1].getDiagonalSums()[i] + p[0].getDiagonalSums()[i] != size) {
-					maxDiag = p[0].getDiagonalSums()[i];
+				if(Math.abs(s.getDiagonalSums()[i]) > maxDiag) {
+					maxDiag = s.getDiagonalSums()[i];
 					diagIndexMax = i;
 				}
-				if(p[1].getDiagonalSums()[i] + p[0].getDiagonalSums()[i] != size && p[1].getDiagonalSums()[i] == size - 1) {
+				if(s.getDiagonalSums()[i] == Math.pow(10, size - 2)) {
 					diagWin = i;
 				}
 			}
 		}
 		
-		if(counter < 2 && size == 3 && p[0].getDiagonalSums()[0] + p[0].getDiagonalSums()[1] != 2) {
-			coord[0] = 1;
-			coord[1] = 1;			
-		} else if(counter < 2 && size == 3 && p[0].getDiagonalSums()[0] + p[0].getDiagonalSums()[1] == 2) {
-			if((int) Math.random() == 1) {
-				coord[0] = (int) (Math.random()*size);
-				coord[1] = coord[0];			
-			} else {
-				coord[1] = (int) (Math.random()*size);
-				coord[0] = size - coord[1] - 1;	
-			}
-		} else if(counter < 4 && size == 3 && p[0].getDiagonalSums()[0] + p[1].getDiagonalSums()[0] == size) {
-			coord[1] = (int) (Math.random()*size);
-			coord[0] = size - coord[1] - 1;		
-		} else if(counter < 4 && size == 3 && p[0].getDiagonalSums()[1] + p[1].getDiagonalSums()[1] == size) {
-			coord[0] = (int) (Math.random()*size);
-			coord[1] = coord[0];
-		} else if(rowWin != -1) {
+		if(s.getRowSums()[rowWin] == -Math.pow(10, size-2)) {
 			coord[0] = rowWin;
 			coord[1] = (int) (Math.random()*size);			
-		} else if(colWin != -1) {
+		} else if(s.getColumnSums()[colWin] == -Math.pow(10, size-2)) {
 			coord[0] = (int) (Math.random()*size);
 			coord[1] = colWin;			
-		} else if(diagWin != -1) {
+		} else if(s.getDiagonalSums()[diagWin] == -Math.pow(10, size-2)) {
 			if(diagWin == 0) {
 				coord[0] = (int) (Math.random()*size);
 				coord[1] = coord[0];
@@ -228,32 +270,129 @@ public class TicTacToe {
 				coord[1] = (int) (Math.random()*size);
 				coord[0] = size - coord[1] - 1;
 			}	
-		} else if(p[1].getDiagonalSums()[0] + p[0].getDiagonalSums()[0] == size && p[1].getDiagonalSums()[1] + p[0].getDiagonalSums()[1] == 1 && size == 3 &&
-				p[1].getRowSums()[1] + p[0].getRowSums()[1] != size || p[1].getRowSums()[1] + p[0].getRowSums()[1] != size &&
-				p[1].getDiagonalSums()[1] + p[0].getDiagonalSums()[1] == size && p[1].getDiagonalSums()[1] + p[0].getDiagonalSums()[0] == 1 && size == 3 ) {
-			coord[0] = 1;
-			coord[1] = (int) (Math.random()*size);
-		} else if (p[0].getDiagonalSums()[diagIndexMax] > p[0].getRowSums()[rowIndexMax] && 
-				   p[0].getDiagonalSums()[diagIndexMax] > p[0].getColumnSums()[colIndexMax]){
+		} else if(s.getDiagonalSums()[diagIndexMax] > s.getRowSums()[rowIndexMax] && 
+				  s.getDiagonalSums()[diagIndexMax] > s.getColumnSums()[colIndexMax]) {
 			if(diagIndexMax == 0) {
 				coord[0] = (int) (Math.random()*size);
 				coord[1] = coord[0];
 			} else {
 				coord[1] = (int) (Math.random()*size);
-				coord[0] = size - coord[1] - 1;	
-			}
-		} else if(p[0].getRowSums()[rowIndexMax] >  p[0].getColumnSums()[colIndexMax]) {
+				coord[0] = size - coord[1] - 1;
+			}	
+		} else if(s.getRowSums()[rowIndexMax] > s.getColumnSums()[colIndexMax] &&
+				  s.getRowSums()[rowIndexMax] > s.getDiagonalSums()[diagIndexMax]) {
 			coord[0] = rowIndexMax;
 			coord[1] = (int) (Math.random()*size);
-		} else if(p[0].getColumnSums()[colIndexMax] > p[0].getRowSums()[diagIndexMax]) {
+		} else if(s.getColumnSums()[colIndexMax] > s.getRowSums()[rowIndexMax] &&
+				  s.getColumnSums()[colIndexMax] > s.getDiagonalSums()[diagIndexMax]) {
 			coord[0] = (int) (Math.random()*size);
 			coord[1] = colIndexMax;
-		
 		} else {
 			coord[0] = (int) (Math.random()*size);
 			coord[1] = (int) (Math.random()*size);
 		}
+		
 		return coord;
+	}
+	
+	//returns remaining moves available
+	public ArrayList<int[]> generateMoves(String[][] ttt) {
+		ArrayList<int[]> moves = new ArrayList<>();
+		for(int i = 0; i < size; i++) {
+			for(int j = 0; j < size; j++) {
+				if(ttt[i][j].equals(" ")) {
+					int[] x = {i, j};
+					moves.add(x);
+				}
+			}
+		}
+		return moves;
+	}
+	
+	public ArrayList<Node> returnScoresForMoves(ArrayList<int[]> moves, Player p, Score score) {
+		int totalScore = 0;
+		int row = 0;
+		int column = 0;
+		Score s1 = null;
+		ArrayList<Node> nlist = new ArrayList<>();
+		
+		for(int[] c : moves) {
+			s1 = new Score(s);
+			row = c[0];
+			column = c[1];
+			totalScore = 0;
+			
+			boolean isOpen = true;
+			for (String cell : ttt[row]) {
+				if(!cell.equals(p.getLetter()) && !cell.equals(" ")) {
+					isOpen = false;			
+				}	
+			} if (isOpen) {
+				s1.adjustRowSums(row, p);
+				totalScore += Math.abs(s1.getRowSums()[row]);
+			} else {
+				totalScore += Math.abs(s1.getRowSums()[row]);
+				s1.setRowSums(0, row);				
+			}
+			
+			isOpen = true;
+			for (int i = 0; i < size; i++) {
+				if(!ttt[i][column].equals(p.getLetter()) && !ttt[i][column].equals(" ")) {
+					isOpen = false;			
+				}	
+			} if (isOpen) {
+				s1.adjustColumnSums(column, p);
+				totalScore += Math.abs(s1.getColumnSums()[column]);
+			} else {
+				totalScore += Math.abs(s1.getColumnSums()[column]);
+				s1.setColumnSums(0, column);
+			}
+			
+			isOpen = true;
+			if(row == column) {
+				for(int i = 0, j = 0; i < size; i++, j++) {
+					if(!ttt[i][j].equals(p.getLetter()) && !ttt[i][j].equals(" ")) {
+						isOpen = false;			
+					}	
+				} if (isOpen) {
+					s1.adjustDiagonalSums(0, p);
+					totalScore += Math.abs(s1.getDiagonalSums()[0]);
+				} else {
+					totalScore += Math.abs(s1.getDiagonalSums()[0]);
+					s1.setDiagonalSums(0, 0);
+				}			
+			}
+			
+			if(row == size - column - 1) {
+				isOpen = true;
+				for(int i = 0, j = size - i - 1; i < size; i++, j--) {
+					if(!ttt[i][j].equals(p.getLetter()) && !ttt[i][j].equals(" ")) {
+						isOpen = false;			
+					}	
+				} if (isOpen) {
+					s1.adjustDiagonalSums(1, p);
+					totalScore += Math.abs(s1.getDiagonalSums()[1]);
+				} else {
+					totalScore += Math.abs(s1.getDiagonalSums()[1]);
+					s1.setDiagonalSums(0, 1);
+				}			
+			}
+			Node node = new Node(row, column, totalScore, p, s1);
+			nlist.add(node);
+		}
+		return nlist; 
+	}
+	
+	public int[] findBestMove(ArrayList<int[]> moves) {
+		
+		Node maxByTotalScore = returnScoresForMoves(moves, p[1], s) 
+			      .stream()
+			      .max(Comparator.comparing(Node::getTotalScore))
+			      .orElseThrow(NoSuchElementException::new);
+		
+		int[] cell = {maxByTotalScore.getRow(), maxByTotalScore.getColumn()};
+		
+		return cell;
 	}
 	
 	public Player[] getP() {
