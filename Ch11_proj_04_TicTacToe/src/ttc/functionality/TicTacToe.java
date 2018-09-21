@@ -331,7 +331,11 @@ public class TicTacToe {
 				s1.adjustRowSums(row, p);
 				totalScore += Math.abs(s1.getRowSums()[row]);
 			} else {
-				totalScore += Math.abs(s1.getRowSums()[row]);
+				if(s1.getRowSums()[row] > 1) {
+					totalScore += Math.abs(s1.getRowSums()[row]) * 2;
+				} else {
+					totalScore += Math.abs(s1.getRowSums()[0]);
+				}
 				s1.setRowSums(0, row);				
 			}
 			
@@ -344,7 +348,11 @@ public class TicTacToe {
 				s1.adjustColumnSums(column, p);
 				totalScore += Math.abs(s1.getColumnSums()[column]);
 			} else {
-				totalScore += Math.abs(s1.getColumnSums()[column]);
+				if(s1.getColumnSums()[column] > 1) {
+					totalScore += Math.abs(s1.getColumnSums()[column]) * 2;
+				} else {
+					totalScore += Math.abs(s1.getColumnSums()[column]);
+				}
 				s1.setColumnSums(0, column);
 			}
 			
@@ -358,7 +366,11 @@ public class TicTacToe {
 					s1.adjustDiagonalSums(0, p);
 					totalScore += Math.abs(s1.getDiagonalSums()[0]);
 				} else {
-					totalScore += Math.abs(s1.getDiagonalSums()[0]);
+					if(s1.getDiagonalSums()[1] > 1) {
+						totalScore += Math.abs(s1.getDiagonalSums()[0]) * 2;
+					} else {
+						totalScore += Math.abs(s1.getDiagonalSums()[0]);
+					}
 					s1.setDiagonalSums(0, 0);
 				}			
 			}
@@ -373,7 +385,12 @@ public class TicTacToe {
 					s1.adjustDiagonalSums(1, p);
 					totalScore += Math.abs(s1.getDiagonalSums()[1]);
 				} else {
-					totalScore += Math.abs(s1.getDiagonalSums()[1]);
+					if(s1.getDiagonalSums()[1] > 1) {
+						totalScore += Math.abs(s1.getDiagonalSums()[1]) * 2;						
+					} else {
+						totalScore += Math.abs(s1.getDiagonalSums()[1]);
+
+					}
 					s1.setDiagonalSums(0, 1);
 				}			
 			}
@@ -385,8 +402,7 @@ public class TicTacToe {
 	
 	public int[] findBestMove(ArrayList<int[]> moves) {
 		
-		Node maxByTotalScore = returnScoresForMoves(moves, p[1], s) 
-			      .stream()
+		Node maxByTotalScore = returnScoresForMoves(moves, p[1], s).stream()
 			      .max(Comparator.comparing(Node::getTotalScore))
 			      .orElseThrow(NoSuchElementException::new);
 		
