@@ -40,9 +40,8 @@ public class CountryIO {
                 // into the array list
                 String line = in.readLine();
                 while (line != null) {
-                    String country = line;
 
-                    countries.add(country);
+                    countries.add(line);
 
                     line = in.readLine();
                 }

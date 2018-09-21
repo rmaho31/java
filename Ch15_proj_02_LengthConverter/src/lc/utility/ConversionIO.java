@@ -93,9 +93,8 @@ public class ConversionIO {
     }
 
     public boolean update(Conversion c, int n) {
-        // get the old product and remove it
-        Conversion oldc = this.get(n);
-        int i = conversions.indexOf(oldc);
+        Conversion oc = this.get(n);
+        int i = conversions.indexOf(oc);
         conversions.remove(i);
 
         // add the updated product
