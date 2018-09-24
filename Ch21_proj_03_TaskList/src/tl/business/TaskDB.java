@@ -14,7 +14,7 @@ public class TaskDB implements TaskDAO {
 		List<Task> task = new ArrayList<>();
 		int value = isCompleted ? 1 : 0;
 		try (Connection connect = getConnection();
-			
+			//setup the prepared statement to select completed entries
 			PreparedStatement ps = connect.prepareStatement("select * from tasks where isCompleted = ?");) {
 			ps.setInt(1, value);
 			ResultSet rs = ps.executeQuery();
@@ -35,7 +35,7 @@ public class TaskDB implements TaskDAO {
 	public Task getbyID(int id) {
 		Task task = null;
 		try (Connection connect = getConnection();
-			
+			//setup the prepared statement to select a row by id
 			PreparedStatement ps = connect.prepareStatement("select * from tasks where id = ?");) {
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
@@ -56,8 +56,7 @@ public class TaskDB implements TaskDAO {
 	public List<Task> getAll() {
 		List<Task> task = new ArrayList<>();
 		try (Connection connect = getConnection()) { 
-			
-			
+					
 			// Sets up the preparedStatement for returning all values from the DB into an arraylist
 			PreparedStatement ps = connect.prepareStatement("select * from tasks");
 			ResultSet rs = ps.executeQuery();
@@ -101,7 +100,7 @@ public class TaskDB implements TaskDAO {
 		int value = t.isCompleted() ? 1 : 0;
 		try (Connection connect = getConnection()) { 
 
-            // Sets up the preparedStatement for inputting the values into the DB from the input Array
+            // Sets up the preparedStatement for updating the values into the DB from the input Array
             PreparedStatement ps = connect
                     .prepareStatement("UPDATE tasks SET task = ?, CompleteBy = ?, isCompleted = ? WHERE id = ?");
             ps.setString(1, t.getTask());
@@ -122,6 +121,7 @@ public class TaskDB implements TaskDAO {
 	public boolean delete(Task t) {
 		try (Connection connect = getConnection();
 				
+				//setup the prepared statement to delete a row from the db by id
 				PreparedStatement ps = connect.prepareStatement("delete from tasks where id = ?");) {
 				ps.setInt(1, t.getId());
 				ps.executeUpdate();
