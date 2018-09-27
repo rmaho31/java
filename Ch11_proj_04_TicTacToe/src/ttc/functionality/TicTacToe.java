@@ -75,9 +75,11 @@ public class TicTacToe {
 						coord = cpuChoice(s, counter);
 						row = coord[0];
 						column = coord[1];
-					} else {
-						ArrayList<int[]> moves = generateMoves(ttt);
-						coord = findBestMove(moves);
+					} else {						
+						MiniMax mm = new MiniMax();
+						mm.constructTree(ttt);
+						mm.checkWin();
+						coord = mm.returnBestMove();
 						row = coord[0];
 						column = coord[1];	
 					}
@@ -296,120 +298,19 @@ public class TicTacToe {
 	}
 	
 	//returns remaining moves available
-	public ArrayList<int[]> generateMoves(String[][] ttt) {
-		ArrayList<int[]> moves = new ArrayList<>();
-		for(int i = 0; i < size; i++) {
-			for(int j = 0; j < size; j++) {
-				if(ttt[i][j].equals(" ")) {
-					int[] x = {i, j};
-					moves.add(x);
-				}
-			}
-		}
-		return moves;
-	}
-	
-	public ArrayList<Node> returnScoresForMoves(ArrayList<int[]> moves, Player p, Score score) {
-		int totalScore = 0;
-		int row = 0;
-		int column = 0;
-		Score s1 = null;
-		ArrayList<Node> nlist = new ArrayList<>();
-		
-		for(int[] c : moves) {
-			s1 = new Score(s);
-			row = c[0];
-			column = c[1];
-			totalScore = 0;
-			
-			boolean isOpen = true;
-			for (String cell : ttt[row]) {
-				if(!cell.equals(p.getLetter()) && !cell.equals(" ")) {
-					isOpen = false;			
-				}	
-			} if (isOpen) {
-				s1.adjustRowSums(row, p);
-				totalScore += Math.abs(s1.getRowSums()[row]);
-			} else {
-				if(s1.getRowSums()[row] > 1) {
-					totalScore += Math.abs(s1.getRowSums()[row]) * 2;
-				} else {
-					totalScore += Math.abs(s1.getRowSums()[0]);
-				}
-				s1.setRowSums(0, row);				
-			}
-			
-			isOpen = true;
-			for (int i = 0; i < size; i++) {
-				if(!ttt[i][column].equals(p.getLetter()) && !ttt[i][column].equals(" ")) {
-					isOpen = false;			
-				}	
-			} if (isOpen) {
-				s1.adjustColumnSums(column, p);
-				totalScore += Math.abs(s1.getColumnSums()[column]);
-			} else {
-				if(s1.getColumnSums()[column] > 1) {
-					totalScore += Math.abs(s1.getColumnSums()[column]) * 2;
-				} else {
-					totalScore += Math.abs(s1.getColumnSums()[column]);
-				}
-				s1.setColumnSums(0, column);
-			}
-			
-			isOpen = true;
-			if(row == column) {
-				for(int i = 0, j = 0; i < size; i++, j++) {
-					if(!ttt[i][j].equals(p.getLetter()) && !ttt[i][j].equals(" ")) {
-						isOpen = false;			
-					}	
-				} if (isOpen) {
-					s1.adjustDiagonalSums(0, p);
-					totalScore += Math.abs(s1.getDiagonalSums()[0]);
-				} else {
-					if(s1.getDiagonalSums()[1] > 1) {
-						totalScore += Math.abs(s1.getDiagonalSums()[0]) * 2;
-					} else {
-						totalScore += Math.abs(s1.getDiagonalSums()[0]);
-					}
-					s1.setDiagonalSums(0, 0);
-				}			
-			}
-			
-			if(row == size - column - 1) {
-				isOpen = true;
-				for(int i = 0, j = size - i - 1; i < size; i++, j--) {
-					if(!ttt[i][j].equals(p.getLetter()) && !ttt[i][j].equals(" ")) {
-						isOpen = false;			
-					}	
-				} if (isOpen) {
-					s1.adjustDiagonalSums(1, p);
-					totalScore += Math.abs(s1.getDiagonalSums()[1]);
-				} else {
-					if(s1.getDiagonalSums()[1] > 1) {
-						totalScore += Math.abs(s1.getDiagonalSums()[1]) * 2;						
-					} else {
-						totalScore += Math.abs(s1.getDiagonalSums()[1]);
-
-					}
-					s1.setDiagonalSums(0, 1);
-				}			
-			}
-			Node node = new Node(row, column, totalScore, p, s1);
-			nlist.add(node);
-		}
-		return nlist; 
-	}
-	
-	public int[] findBestMove(ArrayList<int[]> moves) {
-		
-		Node maxByTotalScore = returnScoresForMoves(moves, p[1], s).stream()
-			      .max(Comparator.comparing(Node::getTotalScore))
-			      .orElseThrow(NoSuchElementException::new);
-		
-		int[] cell = {maxByTotalScore.getRow(), maxByTotalScore.getColumn()};
-		
-		return cell;
-	}
+  	public static ArrayList<int[]> generateMoves(String[][] ttt) {
+  		int size = ttt[0].length;
+  		ArrayList<int[]> moves = new ArrayList<>();
+  		for(int i = 0; i < size; i++) {
+  			for(int j = 0; j < size; j++) {
+  				if(ttt[i][j].equals(" ")) {
+  					int[] x = {i, j};
+  					moves.add(x);
+  				}
+  			}
+  		}
+  		return moves;
+  	}
 	
 	public Player[] getP() {
 		return p;

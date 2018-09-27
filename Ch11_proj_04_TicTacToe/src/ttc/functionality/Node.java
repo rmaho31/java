@@ -1,40 +1,57 @@
 package ttc.functionality;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import ttc.players.Player;
-import ttc.players.Score;
 
 public class Node {
-	private int row;
-	private int column;
+	private String[][] ttt;
 	private int totalScore;
-	private Player p;
-	private Score s;
-	private List<Node> children; 
+	private boolean maxPlayer;
+	private List<Node> children;
+	private int depth;
+	private int alpha;
+	private int beta;
 
-	public Node(int row, int column, int totalScore, Player p, Score s) {
-		this.row = row;
-		this.column = column;
-		this.totalScore = totalScore;
-		this.p = p;
-		this.s = s;
+	public int getDepth() {
+		return depth;
 	}
 
-	public int getRow() {
-		return row;
+	public void setDepth(int depth) {
+		this.depth = depth;
 	}
 
-	public void setRow(int row) {
-		this.row = row;
+	public Node(String[][] ttt, boolean maxPlayer, int alpha, int beta) {
+		this.ttt = Arrays.copyOf(ttt, ttt[0].length);
+		this. maxPlayer = maxPlayer;
+		children = new ArrayList<>();
+		this.alpha = alpha;
+		this.beta = beta;
 	}
 
-	public int getColumn() {
-		return column;
+	public int getAlpha() {
+		return alpha;
 	}
 
-	public void setColumn(int column) {
-		this.column = column;
+	public void setAlpha(int alpha) {
+		this.alpha = alpha;
+	}
+
+	public int getBeta() {
+		return beta;
+	}
+
+	public void setBeta(int beta) {
+		this.beta = beta;
+	}
+
+	public String[][] getTtt() {
+		return ttt;
+	}
+
+	public void setTtt(String[][] ttt) {
+		this.ttt = ttt;
 	}
 
 	public int getTotalScore() {
@@ -45,22 +62,13 @@ public class Node {
 		this.totalScore = totalScore;
 	}
 
-	public Player getP() {
-		return p;
+	public boolean isMaxPlayer() {
+		return maxPlayer;
 	}
 
-	public void setP(Player p) {
-		this.p = p;
+	public void setMaxPlayer(boolean maxPlayer) {
+		this.maxPlayer = maxPlayer;
 	}
-
-	public Score getS() {
-		return s;
-	}
-
-	public void setS(Score s) {
-		this.s = s;
-	}
-
 
 	public List<Node> getChildren() {
 		return children;

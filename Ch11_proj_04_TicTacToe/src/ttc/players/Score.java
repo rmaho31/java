@@ -59,6 +59,22 @@ public class Score {
 		}
 	}
 	
+	public void adjustColumnSums(int index, boolean isMaxPlayer) {
+		if(isMaxPlayer){
+			if(columnSums[index] > 0) {
+				columnSums[index] *= 10;
+			} else {
+				columnSums[index]++;				
+			}
+		} else {
+			if(columnSums[index] < 0) {
+				columnSums[index] *= 10;
+			} else {
+				columnSums[index]--;				
+			}
+		}
+	}
+	
 	public void adjustRowSums(int index, Player p) {
 		if(p.getLetter().equals("X")){
 			if(rowSums[index] > 0) {
@@ -75,8 +91,40 @@ public class Score {
 		}
 	}
 	
+	public void adjustRowSums(int index, boolean isMaxPlayer) {
+		if(isMaxPlayer){
+			if(rowSums[index] > 0) {
+				rowSums[index] *= 10;
+			} else {
+				rowSums[index]++;				
+			}
+		} else {
+			if(rowSums[index] < 0) {
+				rowSums[index] *= 10;
+			} else {
+				rowSums[index]--;				
+			}
+		}
+	}
+	
 	public void adjustDiagonalSums(int index, Player p) {
 		if(p.getLetter().equals("X")){
+			if(diagonalSums[index] > 0) {
+				diagonalSums[index] *= 10;
+			} else {
+				diagonalSums[index]++;				
+			}
+		} else {
+			if(diagonalSums[index] < 0) {
+				diagonalSums[index] *= 10;
+			} else {
+				diagonalSums[index]--;				
+			}
+		}
+	}
+	
+	public void adjustDiagonalSums(int index, boolean isMaxPlayer) {
+		if(isMaxPlayer){
 			if(diagonalSums[index] > 0) {
 				diagonalSums[index] *= 10;
 			} else {
