@@ -1,9 +1,9 @@
 package r.business;
 import java.text.NumberFormat;
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.time.temporal.ChronoUnit;
 
 public class Reservation {
 	private LocalDate dateArrival;
@@ -36,7 +36,7 @@ public class Reservation {
 		this.dateDeparture = dateDeparture;
 	}
 	public int getNights() {
-		return Period.between(dateArrival, dateDeparture).getDays();
+		return (int) ChronoUnit.DAYS.between(dateArrival, dateDeparture);
 	}
 
 	public String getNIGHTLY_RATE() {

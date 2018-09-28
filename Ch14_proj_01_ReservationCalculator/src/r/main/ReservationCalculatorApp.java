@@ -12,25 +12,18 @@ public class ReservationCalculatorApp {
 		while(choice.equalsIgnoreCase("y")) {
 			Reservation r = makeReservation();
 			printReservation(r);
-			choice = Console.getString("Continue? (y/n)", "y", "n");
-			
+			choice = Console.getString("Continue? (y/n): ", "y", "n");			
 		}
-
 	}
 	
 	public static Reservation makeReservation() {
-		String[] dArr = Console.getString("Enter Arrival Date: MM/DD/YYYY: ", "\\d+/\\d+/\\d+").split("/");
-		String[] dDep = Console.getString("Enter Departure Date: MM/DD/YYYY: ", "\\d+/\\d+/\\d+").split("/");
-		
-		Reservation r = new Reservation(dArr[2] + "-" + dArr[0] + "-" + dArr[1],
-										dDep[2] + "-" + dDep[0] + "-" + dDep[1]);
-		return r;
+		return new Reservation(Console.getString("Enter Arrival Date: YYYY-MM-DD: ", "\\d+-\\d+-\\d+"),
+							   Console.getString("Enter Departure Date: YYYY-MM-DD: ", "\\d+-\\d+-\\d+"));
 	}
 	public static void printReservation(Reservation r) {
-		Console.println("Arrival Date: " + r.getDateArrivalFormatted());
-		Console.println("Departure Date: " + r.getDateDepartureFormatted());
-		Console.println("Price: " + r.getNIGHTLY_RATE());
-		Console.println("Total price: " + r.getTotalPrice()+ "\n");
+		Console.println("Arrival Date: " + r.getDateArrivalFormatted() +
+						"\nDeparture Date: " + r.getDateDepartureFormatted() + 
+						"\nPrice: " + r.getNIGHTLY_RATE() + "Total price: " + r.getTotalPrice()+ "\n");
 		
 	}
 
