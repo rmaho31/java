@@ -1,6 +1,9 @@
 package pc.main;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import pc.utility.Console;
 
@@ -12,21 +15,19 @@ public class PathCheckerApp {
 		
 		String choice = "y";
 		while(choice.equalsIgnoreCase("y")) {
-			File file = new File(Console.getString("Enter a path: "));
+			Path path = Paths.get(Console.getString("Enter Path: "));
+			File f = path.toFile();
+			System.out.println(f.getAbsolutePath());
 			
-			System.out.println(file.getAbsolutePath());
-
-			if(file.exists() && file.isFile()) {
+			if(f.isFile()) {
 				Console.println("The path points to a file.");
-			} else if(file.exists() && file.isDirectory()) {
+			} else if(f.isDirectory()) {
 				Console.println("Path points to a directory.");
 			} else {
 				Console.println("The path does not exist.");
 			}
 			
-			choice = Console.getString("Continue? (y/n)", "y", "n");
+			choice = Console.getString("Continue? (y/n): ", "y", "n");
 		}
-
 	}
-
 }
