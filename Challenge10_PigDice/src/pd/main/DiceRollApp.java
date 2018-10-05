@@ -16,23 +16,23 @@ public class DiceRollApp {
 		
 		
 		
-		int choice = 0;
-		choice = Console.getInt("Number of rolls?: ", 0, Integer.MAX_VALUE);
+		double choice = 0;
+		choice = Console.getDouble("Number of rolls?: ", 0, Double.POSITIVE_INFINITY);
 		
 		runGame(choice);
 		
 	}
 	
-	public static void runGame(int choice) {
-		ArrayList<Integer> rolls = new ArrayList<>();
-		ArrayList<Integer> total = new ArrayList<>();
-		ArrayList<Double> percTwo = new ArrayList<>();
-		ArrayList<Double> percThree = new ArrayList<>();
-		ArrayList<Double> percFour = new ArrayList<>();
-		ArrayList<Double> percFive = new ArrayList<>();
-		ArrayList<Double> percSix = new ArrayList<>();
+	public static void runGame(double choice) {
+		int rolls = 0;
+		int total = 0;
+		double percTwo = 0;
+		double percThree = 0;
+		double percFour = 0;
+		double percFive = 0;
+		double percSix = 0;
 		
-		for(int i = 0; i < choice; i++) {
+		for(double i = 0; i < choice; i++) {
 			int two = 0;
 			int three = 0;
 			int four = 0;
@@ -64,31 +64,25 @@ public class DiceRollApp {
 			}
 			
 
-			rolls.add(counter);
-			total.add(sum);
-			percTwo.add((double)two/(double)counter);
-			percThree.add((double)three/(double)counter);
-			percFour.add((double)four/(double)counter);
-			percFive.add((double)five/(double)counter);
-			percSix.add((double)six/(double)counter);
+			rolls = Math.max(rolls, counter);
+			total = Math.max(total, sum);
+			percTwo = Math.max(percTwo, two/(double) counter);
+			percThree = Math.max(percThree, three/(double)counter);
+			percFour = Math.max(percFour, four/(double)counter);
+			percFive = Math.max(percFive, five/(double)counter);
+			percSix = Math.max(percSix, six/(double)counter);
 			
 		}
-		Collections.sort(rolls);
-		Collections.sort(total);
-		Collections.sort(percTwo);
-		Collections.sort(percThree);
-		Collections.sort(percFour);
-		Collections.sort(percFive);
-		Collections.sort(percSix);
+
 		
-		double[] n1 = {percTwo.get(percTwo.size()-1), percThree.get(percThree.size()-1),
-					   percFour.get(percFour.size()-1), percFive.get(percFive.size()-1),
-					   percSix.get(percSix.size()-1)}; 
+		double[] n1 = {percTwo, percThree,
+					   percFour, percFive,
+					   percSix}; 
 
 		
 		System.out.println("Played " + choice + " games");
-		System.out.println("Highest Score was " + total.get(total.size()-1));
-		System.out.println("Highest number of rolls was " + rolls.get(rolls.size()-1));
+		System.out.println("Highest Score was " + total);
+		System.out.println("Highest number of rolls was " + rolls);
 		System.out.println(getHighestPercent(n1));
 		System.out.println("\nBye!");
 	}
