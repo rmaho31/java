@@ -23,5 +23,4 @@ public class FirstLastSixApp {
 		}
 		return false;
 	}
-
 }
